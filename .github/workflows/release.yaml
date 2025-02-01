@@ -44,8 +44,23 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
+      # Initialize Go Modules
+      - name: Initialize Go Modules
+        run: |
+          cd app/src/main/jni  # Adjust path if necessary
+          go mod init example.com/your-module || true  # Prevent errors if it already exists
+          go mod tidy
+          go mod verify
+
+      # Install and Initialize Gomobile
+      - name: Install and Initialize Gomobile
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          gomobile init
+
+      # Build Tun2Socks AAR
       - name: Build Tun2Socks AAR
-        run: ./gradlew buildTun2SocksAar
+        run: ./gradlew buildTun2SocksAar --stacktrace
 
       # Run Build Project
       - name: Build gradle project
@@ -69,3 +84,4 @@ jobs:
           name: oblivion-${{ github.sha }}-unsigned.apk
           path: |
             app/build/outputs/apk/release/*.apk
+            
