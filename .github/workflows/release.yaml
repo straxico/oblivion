@@ -47,6 +47,7 @@ jobs:
       # Initialize Go Modules
       - name: Initialize Go Modules
         run: |
+          cd ./tun2socks
           go mod tidy
 
       # Build Tun2Socks AAR
